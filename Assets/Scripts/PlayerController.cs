@@ -6,6 +6,9 @@ public class PlayerController : MonoBehaviour {
 	public float moveSpeed;
 	Rigidbody rb;
 
+	public GameObject projectile;
+	public float projectileSpeed ;
+
 	void Start () {
 		rb = GetComponent<Rigidbody> ();
 	}
@@ -15,6 +18,7 @@ public class PlayerController : MonoBehaviour {
 
 		LookAt ();
 		Move ();
+		Shoot ();
 	}
 
 
@@ -39,4 +43,15 @@ public class PlayerController : MonoBehaviour {
 		rb.velocity = newVelocity;
 
 	}
+
+
+	void Shoot(){
+		
+		if (Input.GetButtonUp ("Fire1")) {
+			GameObject go = Instantiate (projectile, transform.GetChild(0).position, transform.rotation) as GameObject;
+
+			go.GetComponent<Rigidbody> ().AddForce (transform.right * projectileSpeed);
+		}
+	}
+
 }
