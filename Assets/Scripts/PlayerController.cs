@@ -1,24 +1,40 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
+public class PlayerController : MonoBehaviour
+{
 
-public class PlayerController : MonoBehaviour {
+	public Slider healthBarSlider;
+	public Slider armorBarSlider;
 
 	public float moveSpeed;
 	Rigidbody rb;
 
-	void Start () {
+	public GameObject projectile;
+	public float projectileSpeed;
+
+	void Start ()
+	{
 		rb = GetComponent<Rigidbody> ();
 	}
 	
 	// Update is called once per frame
-	void Update () {		
+	void Update ()
+	{		
 
 		LookAt ();
 		Move ();
+		Shoot ();
+
+
+
+		healthBarSlider.value = GetComponent<Unit> ().health;
+		armorBarSlider.value = GetComponent<Unit> ().armor;
 	}
 
 
-	void LookAt(){
+	void LookAt ()
+	{
 
 		Vector3 mousePos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 		mousePos.y = transform.position.y;
@@ -30,13 +46,28 @@ public class PlayerController : MonoBehaviour {
 	}
 
 
-	void Move(){		
+	void Move ()
+	{		
 		float inputHorizontal = Input.GetAxis ("Horizontal");
 		float inputVertical = Input.GetAxis ("Vertical");
-		//	float speedY = inputVertical > 0.1 ? Mathf.Clamp ((inputVertical * moveSpeed), moveSpeed / 2.0f, moveSpeed) : 0.0f;
-		//float speedX = inputHorizontal > 0.1 ? Mathf.Clamp ((inputHorizontal * moveSpeed), moveSpeed / 2.0f, moveSpeed) : 0.0f;
-		Vector3 newVelocity=new Vector3(inputVertical*moveSpeed, 0.0f, inputHorizontal*-moveSpeed);
+		Vector3 newVelocity = new Vector3 (inputVertical * moveSpeed, 0f, -inputHorizontal * moveSpeed);
 		rb.velocity = newVelocity;
-
 	}
+
+
+	void Shoot ()
+	{
+		
+		if (Input.GetButtonUp ("Fire1") && GetComponent<Unit>().ammo>0) {
+			GetComponent<Unit> ().ammo -= 1;
+			GameObject go = Instantiate (projectile, transform.GetChild (0).position, transform.rotation) as GameObject;
+			go.GetComponent<Rigidbody> ().AddForce (transform.right * projectileSpeed);
+		}
+			
+	}
+
+
+
+
+
 }
