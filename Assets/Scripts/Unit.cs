@@ -30,6 +30,7 @@ public class Unit : MonoBehaviour {
 		Bullet bullet = other.GetComponent<Bullet> ();
 
 		if (bullet!=null) {
+			Debug.Log ("hit regisrested");
 			health -= bullet.damage*(1-armor/100);
 			health = Mathf.Max (0,health);
 			armor -= bullet.damage;
