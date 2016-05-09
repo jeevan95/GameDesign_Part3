@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 
 	public Slider healthBarSlider;
 	public Slider armorBarSlider;
+	public Text ammoText;
 
 	public float moveSpeed;
 	Rigidbody rb;
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour
 
 		healthBarSlider.value = GetComponent<Unit> ().health;
 		armorBarSlider.value = GetComponent<Unit> ().armor;
+		ammoText.text = "AMMO: " + GetComponent<Unit> ().ammo;
 	}
 
 
@@ -52,6 +54,9 @@ public class PlayerController : MonoBehaviour
 		float inputVertical = Input.GetAxis ("Vertical");
 		Vector3 newVelocity = new Vector3 (inputVertical * moveSpeed, 0f, -inputHorizontal * moveSpeed);
 		rb.velocity = newVelocity;
+
+		transform.position = new Vector3 (transform.position.x,0.5f,transform.position.z);
+
 	}
 
 

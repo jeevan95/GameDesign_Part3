@@ -30,5 +30,9 @@ public class EnemyController : MonoBehaviour {
 
         //move towards the player
         transform.position = Vector3.MoveTowards(transform.position, nn, moveSpeed * Time.deltaTime);
+
+
+		transform.position = new Vector3 (transform.position.x,0.5f,transform.position.z);
+
     }
 }
