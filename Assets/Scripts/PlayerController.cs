@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
 		Move ();
 		Shoot ();
 
+//		Debug.Log (rb.velocity);
 
 
 		healthBarSlider.value = GetComponent<Unit> ().health;
@@ -34,6 +35,10 @@ public class PlayerController : MonoBehaviour
 		ammoText.text = "AMMO: " + GetComponent<Unit> ().ammo;
 	}
 
+	void FixedUpdate(){
+		
+		rb.angularVelocity *= 0.9f;
+	}
 
 	void LookAt ()
 	{
@@ -50,6 +55,7 @@ public class PlayerController : MonoBehaviour
 
 	void Move ()
 	{		
+		
 		float inputHorizontal = Input.GetAxis ("Horizontal");
 		float inputVertical = Input.GetAxis ("Vertical");
 		Vector3 newVelocity = new Vector3 (inputVertical * moveSpeed, 0f, -inputHorizontal * moveSpeed);

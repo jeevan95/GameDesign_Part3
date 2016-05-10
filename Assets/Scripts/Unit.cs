@@ -5,13 +5,13 @@ using UnityEditor;
 
 public class Unit : MonoBehaviour {
 
-	public int health;
-	public int armor;
-	public int ammo;
+	public float health;
+	public float armor;
+	public float ammo;
 
-	public int maxAmmo=2000;
-	public int maxArmor=100;
-	public int maxHealth=100;
+	public float maxAmmo=2000;
+	public float maxArmor=100;
+	public float maxHealth=100;
 
 	void Update(){
 		if (tag == "Enemy") {
@@ -31,14 +31,18 @@ public class Unit : MonoBehaviour {
 
 		if (bullet!=null) {
 			Debug.Log ("hit regisrested");
-			health -= bullet.damage*(1-armor/100);
-			health = Mathf.Max (0,health);
-			armor -= bullet.damage;
-			armor = Mathf.Max (0,armor);
+			takeDamage (bullet.damage);
 			Destroy (other.gameObject);
-		}
+		}			
+	}
 
 
+	public void takeDamage(float damage){
+
+		health -= ((float)damage)*(1-((float)armor/100));
+		health = Mathf.Max (0,health);
+		armor -= damage;
+		armor = Mathf.Max (0,armor);
 
 	}
 
