@@ -3,13 +3,17 @@ using System.Collections;
 
 public class GameController : MonoBehaviour {
 
-	public GameObject enemy;
+	public GameObject gunEnemy;
+	public GameObject knifeEnemy;
 	public GameObject healthPack;
 	public GameObject ammoPack;
 	public GameObject armorPack;
 
-	public int enemyCount;
-	public int enemiesNeeded;
+	public int gunEnemyCount;
+	public int gunEnemiesNeeded;
+
+	public int knifeEnemyCount;
+	public int knifeEnemiesNeeded;
 
 	public int healthPackCount;
 	public int ammoPackCount;
@@ -66,16 +70,15 @@ public class GameController : MonoBehaviour {
 
 
 	void SpawnEnemies(){
-		enemyCount = GameObject.FindGameObjectsWithTag ("Enemy").Length;
+		gunEnemyCount = GameObject.FindGameObjectsWithTag ("GunEnemy").Length;
+		if (gunEnemiesNeeded != gunEnemyCount) {			
+			GameObject e = Instantiate (gunEnemy,getRandomSpawn(), transform.rotation) as GameObject;
+		}
 
-		if (enemiesNeeded != enemyCount) {
-			float randomX = Random.Range (spawnXMin, spawnXMax);
-			float randomY = Random.Range (spawnYMin, spawnYMax);
 
-			Vector3 spawn = new Vector3 (randomX, 0.5f, randomY);
-
-			GameObject e = Instantiate (enemy,spawn , transform.rotation) as GameObject;
-
+		knifeEnemyCount = GameObject.FindGameObjectsWithTag ("KnifeEnemy").Length;
+		if (knifeEnemiesNeeded != knifeEnemyCount) {			
+			GameObject e = Instantiate (knifeEnemy,getRandomSpawn(), transform.rotation) as GameObject;
 		}
 
 

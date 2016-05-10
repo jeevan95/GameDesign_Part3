@@ -7,6 +7,9 @@ public class EnemyController : MonoBehaviour {
     public float moveSpeed = 5; //move speed
     public float rotationSpeed = 5; //speed of turning
     private Rigidbody rb;
+	public int bulletDamage;
+	public float cooldown = 0.4f;
+	private float actionLast=0;
 
 
     public GameObject projectile;
@@ -42,16 +45,26 @@ public class EnemyController : MonoBehaviour {
 
         if (Mathf.Abs((target.transform.position - transform.position).x) < shootradius && Mathf.Abs((target.transform.position - transform.position).z) < shootradius)
         {
-            int e = Random.Range(1, 40);
-            if (e < 5)
-            {
-                Vector3 childpos = new Vector3(transform.GetChild(0).position.x, 0.5f, transform.GetChild(0).position.z);
-                GameObject go = Instantiate(projectile, childpos, transform.rotation) as GameObject;
-                go.GetComponent<Rigidbody>().AddForce(transform.right * projectileSpeed);
-
-            }
+//            int e = Random.Range(1, 40);
+//            if (e < 5)
+//            {
+			if (cooldownReady()) {
+				actionLast = Time.time;
+				Vector3 childpos = new Vector3 (transform.GetChild (0).position.x, 0.5f, transform.GetChild (0).position.z);
+				GameObject go = Instantiate (projectile, childpos, transform.rotation) as GameObject;
+				go.GetComponent<Bullet> ().damage = bulletDamage;
+				go.GetComponent<Rigidbody> ().AddForce (transform.right * projectileSpeed);
+			}
+//            }
         }
 
        
     }
+
+
+	bool cooldownReady(){
+		return ((Time.time-actionLast)>cooldown);
+	}
+
+
 }
