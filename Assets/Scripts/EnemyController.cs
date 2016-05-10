@@ -30,8 +30,8 @@ public class EnemyController : MonoBehaviour {
         Vector3 nn = new Vector3(target.transform.position.x, target.transform.position.y, target.transform.position.z);
 
         //move towards the player
-        transform.position = Vector3.MoveTowards(transform.position, nn, moveSpeed * Time.deltaTime);
-
+//        transform.position = Vector3.MoveTowards(transform.position, nn, moveSpeed * Time.deltaTime);
+		rb.velocity = (target.transform.position - transform.position).normalized * moveSpeed;
 
 		transform.position = new Vector3 (transform.position.x,0.5f,transform.position.z);
 
