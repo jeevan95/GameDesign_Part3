@@ -8,6 +8,10 @@ public class EnemyController : MonoBehaviour {
     public float rotationSpeed = 5; //speed of turning
     private Rigidbody rb;
 
+
+    public GameObject projectile;
+    public float projectileSpeed;
+    public float shootradius;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -33,7 +37,21 @@ public class EnemyController : MonoBehaviour {
 //        transform.position = Vector3.MoveTowards(transform.position, nn, moveSpeed * Time.deltaTime);
 		rb.velocity = (target.transform.position - transform.position).normalized * moveSpeed;
 
-		transform.position = new Vector3 (transform.position.x,0.5f,transform.position.z);
 
+        transform.position = new Vector3 (transform.position.x,0.5f,transform.position.z);
+
+        if (Mathf.Abs((target.transform.position - transform.position).x) < shootradius && Mathf.Abs((target.transform.position - transform.position).z) < shootradius)
+        {
+            int e = Random.Range(1, 40);
+            if (e < 5)
+            {
+                Vector3 childpos = new Vector3(transform.GetChild(0).position.x, 0.5f, transform.GetChild(0).position.z);
+                GameObject go = Instantiate(projectile, childpos, transform.rotation) as GameObject;
+                go.GetComponent<Rigidbody>().AddForce(transform.right * projectileSpeed);
+
+            }
+        }
+
+       
     }
 }
