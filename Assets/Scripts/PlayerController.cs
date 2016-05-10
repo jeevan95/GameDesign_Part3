@@ -1,12 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
 
 	public Slider healthBarSlider;
 	public Slider armorBarSlider;
 	public Text ammoText;
+	public Text deathText;
+	public GameObject respawn;
+	public GameObject exit;
 
 	public float moveSpeed;
 	Rigidbody rb;
@@ -16,7 +20,13 @@ public class PlayerController : MonoBehaviour
 
 	void Start ()
 	{
+		
 		rb = GetComponent<Rigidbody> ();
+
+		Time.timeScale = 1;
+		respawn.SetActive(false);
+		exit.SetActive(false);
+		deathText.enabled = false;
 	}
 	
 	// Update is called once per frame
@@ -78,8 +88,15 @@ public class PlayerController : MonoBehaviour
 			
 	}
 
+	public void Respawn(){
+		
+		SceneManager.LoadScene ("Main");
 
+	}
 
+	public void Exit(){
+		Application.Quit ();
+	}
 
 
 }

@@ -15,7 +15,18 @@ public class Unit : MonoBehaviour {
 
 	void Update(){
 			if (health <= 0) {
+
+			if (gameObject.tag == "Player") {
+				// game over
+				Time.timeScale = 0;
+
+				GetComponent<PlayerController> ().deathText.enabled=true;
+				GetComponent<PlayerController> ().respawn.SetActive(true);
+				GetComponent<PlayerController> ().exit.SetActive(true);
+			} else {
 				Destroy (this.gameObject);
+			}
+				
 			}
 		
 
@@ -31,7 +42,8 @@ public class Unit : MonoBehaviour {
 		if (bullet!=null) {
 			Debug.Log ("hit regisrested");
 			takeDamage (bullet.damage);
-			Destroy (other.gameObject);
+
+
 		}			
 	}
 

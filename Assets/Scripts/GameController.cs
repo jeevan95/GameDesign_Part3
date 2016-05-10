@@ -3,6 +3,8 @@ using System.Collections;
 
 public class GameController : MonoBehaviour {
 
+
+
 	public GameObject gunEnemy;
 	public GameObject knifeEnemy;
 	public GameObject healthPack;
@@ -29,7 +31,7 @@ public class GameController : MonoBehaviour {
 	public float spawnYMin;
 	public float spawnYMax;
 
-
+	public int playerDeath = 0;
 
 	void Start () {
 	
