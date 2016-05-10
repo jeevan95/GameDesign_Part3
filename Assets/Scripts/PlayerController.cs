@@ -71,6 +71,7 @@ public class PlayerController : MonoBehaviour
 		
 		if (Input.GetButtonUp ("Fire1") && GetComponent<Unit>().ammo>0) {
 			GetComponent<Unit> ().ammo -= 1;
+
 			GameObject go = Instantiate (projectile, transform.GetChild (0).position, transform.rotation) as GameObject;
 			go.GetComponent<Rigidbody> ().AddForce (transform.right * projectileSpeed);
 		}

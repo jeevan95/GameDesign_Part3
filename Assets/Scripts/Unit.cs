@@ -14,11 +14,10 @@ public class Unit : MonoBehaviour {
 	public float maxHealth=100;
 
 	void Update(){
-		if (tag == "Enemy") {
 			if (health <= 0) {
 				Destroy (this.gameObject);
 			}
-		}
+		
 
 			
 
