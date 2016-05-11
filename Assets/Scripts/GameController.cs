@@ -32,6 +32,7 @@ public class GameController : MonoBehaviour {
 	public float spawnYMax;
 
 	public int playerDeath = 0;
+	public float playerAccuracy;
 
 
 	void Start () {
@@ -64,17 +65,19 @@ public class GameController : MonoBehaviour {
 
 		if (healthPackCount < healthPacksNeeded) {
 			GameObject e = Instantiate (healthPack,getRandomSpawn() , transform.rotation) as GameObject;
+			e.GetComponent<HealthPack> ();
 		}
 
 
 		if (ammoPackCount < ammoPacksNeeded) {
-			GameObject e = Instantiate (ammoPack,getRandomSpawn() , transform.rotation) as GameObject;
+			GameObject e = Instantiate (ammoPack,getRandomSpawn() , ammoPack.transform.rotation) as GameObject;
+			e.GetComponent<AmmoPack> ();
 		}
 
 
 		if (armorPackCount< armorPacksNeeded){
-			GameObject e = Instantiate (armorPack,getRandomSpawn() , transform.rotation) as GameObject;
-			
+			GameObject e = Instantiate (armorPack,getRandomSpawn() , armorPack.transform.rotation) as GameObject;
+			e.GetComponent<ArmorPack> ();
 		}
 
 	}
