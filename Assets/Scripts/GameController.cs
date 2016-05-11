@@ -11,6 +11,8 @@ public class GameController : MonoBehaviour {
 	public GameObject ammoPack;
 	public GameObject armorPack;
 
+	public GameObject bomb;
+
 	public int gunEnemyCount;
 	public int gunEnemiesNeeded;
 
@@ -24,6 +26,7 @@ public class GameController : MonoBehaviour {
 	public int healthPacksNeeded;
 	public int ammoPacksNeeded;
 	public int armorPacksNeeded;
+
 
 
 	public float spawnXMin;
@@ -44,16 +47,17 @@ public class GameController : MonoBehaviour {
 			DontDestroyOnLoad (this.gameObject);
 		}
 
-
+		GameObject e = Instantiate (bomb,getRandomSpawn() , bomb.transform.rotation) as GameObject;
 
 
 	}
 
 	void Update () {
-	
-		Debug.Log (playerDeath);
+
 		SpawnEnemies ();
 		SpawnPacks ();
+
+
 
 
 	}
