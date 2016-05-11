@@ -70,13 +70,13 @@ public class GameController : MonoBehaviour {
 
 
 		if (ammoPackCount < ammoPacksNeeded) {
-			GameObject e = Instantiate (ammoPack,getRandomSpawn() , transform.rotation) as GameObject;
+			GameObject e = Instantiate (ammoPack,getRandomSpawn() , ammoPack.transform.rotation) as GameObject;
 			e.GetComponent<AmmoPack> ();
 		}
 
 
 		if (armorPackCount< armorPacksNeeded){
-			GameObject e = Instantiate (armorPack,getRandomSpawn() , transform.rotation) as GameObject;
+			GameObject e = Instantiate (armorPack,getRandomSpawn() , armorPack.transform.rotation) as GameObject;
 			e.GetComponent<ArmorPack> ();
 		}
 
