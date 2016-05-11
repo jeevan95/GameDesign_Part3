@@ -13,6 +13,14 @@ public class Unit : MonoBehaviour {
 	public float maxArmor=100;
 	public float maxHealth=100;
 
+	public GameObject bloodDeath;
+	private bool dead=false;
+
+
+	void Start(){
+		
+	}
+
 	void Update(){
 			if (health <= 0) {
 
@@ -23,8 +31,19 @@ public class Unit : MonoBehaviour {
 				GetComponent<PlayerController> ().deathText.enabled=true;
 				GetComponent<PlayerController> ().respawn.SetActive(true);
 				GetComponent<PlayerController> ().exit.SetActive(true);
+				if (!dead) {
+					GameObject.FindObjectOfType<GameController> ().playerDeath += 1;
+					dead = true;
+				}
 			} else {
+				Quaternion rot = Random.rotation;
+				rot.x = 0;
+				rot.z = 0;
+				Vector3 pos = transform.position;
+				pos.y = 0.1f;
+				GameObject go = Instantiate (bloodDeath, pos, rot) as GameObject;
 				Destroy (this.gameObject);
+
 			}
 				
 			}

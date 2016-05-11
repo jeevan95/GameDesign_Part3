@@ -33,15 +33,24 @@ public class GameController : MonoBehaviour {
 
 	public int playerDeath = 0;
 
+
 	void Start () {
-	
+
+		GameController gc = GameObject.FindObjectOfType<GameController> ();
+		if (gc != null && gc!=this) {			
+			Destroy (this);			
+		} else {
+			DontDestroyOnLoad (this.gameObject);
+		}
+
+
 
 
 	}
 
 	void Update () {
 	
-
+		Debug.Log (playerDeath);
 		SpawnEnemies ();
 		SpawnPacks ();
 

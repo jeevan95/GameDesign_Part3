@@ -17,6 +17,8 @@ public class EnemyController : MonoBehaviour {
     public float shootradius;
     void Start()
     {
+
+
         rb = GetComponent<Rigidbody>();
 		target = GameObject.FindGameObjectWithTag ("Player");
     }
