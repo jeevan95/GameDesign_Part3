@@ -18,6 +18,9 @@ public class PlayerController : MonoBehaviour
 	public GameObject projectile;
 	public float projectileSpeed;
 
+	public int kills=0;
+	public int shoots=0;
+	public float accuracy=0;
 	void Start ()
 	{
 		
@@ -32,6 +35,7 @@ public class PlayerController : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{		
+		accuracy = (float) kills/ (float)shoots;
 
 		LookAt ();
 		Move ();
@@ -81,9 +85,11 @@ public class PlayerController : MonoBehaviour
 		
 		if (Input.GetButtonUp ("Fire1") && GetComponent<Unit>().ammo>0) {
 			GetComponent<Unit> ().ammo -= 1;
+			shoots += 1;
 
 			GameObject go = Instantiate (projectile, transform.GetChild (0).position, transform.rotation) as GameObject;
 			go.GetComponent<Rigidbody> ().AddForce (transform.right * projectileSpeed);
+			go.GetComponent<Bullet> ().owner = this.gameObject;
 		}
 			
 	}

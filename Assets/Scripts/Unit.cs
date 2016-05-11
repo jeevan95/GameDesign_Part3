@@ -14,6 +14,7 @@ public class Unit : MonoBehaviour {
 	public float maxHealth=100;
 
 	public GameObject bloodDeath;
+	public GameObject bloodDamage;
 	private bool dead=false;
 
 
@@ -61,7 +62,11 @@ public class Unit : MonoBehaviour {
 		if (bullet!=null) {
 			Debug.Log ("hit regisrested");
 			takeDamage (bullet.damage);
-
+			if (health < 1) {
+				if(bullet.owner.GetComponent<PlayerController>()!=null){
+					bullet.owner.GetComponent<PlayerController> ().kills += 1;
+				}
+			}
 
 		}			
 	}
@@ -73,6 +78,13 @@ public class Unit : MonoBehaviour {
 		health = Mathf.Max (0,health);
 		armor -= damage;
 		armor = Mathf.Max (0,armor);
+
+		Quaternion rot = Random.rotation;
+		rot.x = 0;
+		rot.z = 0;
+		Vector3 pos = transform.position;
+		pos.y = 0.1f;
+		GameObject go = Instantiate (bloodDamage, pos, rot) as GameObject;
 
 	}
 
