@@ -39,12 +39,13 @@ public class GameController : MonoBehaviour {
 	public float playerAccuracy;
 	public int level=0;
 
-	float ammoPerLevel=5;
-	float healthPerLevel=100;
 
-	int ammoPacksPerLevel=4;
+
+
+	public float ammoPerLevel=5;
+	public int ammoPacksPerLevel=4;
 	int healthPacksPerLevel=4;
-
+	float healthPerLevel=100;
 	public bool respawn = false;
 
 	void Start () {
@@ -161,21 +162,29 @@ public class GameController : MonoBehaviour {
 		setPacks (0,0,0);
 	}
 
+
+	float accuracyLast=1;
+
 	public void playerDead(Unit unit){
 		playerDeath += 1;
 
 		PlayerController pc = unit.gameObject.GetComponent<PlayerController> ();
-
 		float ammoPotential = pc.accuracy * unit.ammo; //#kills
-
+		float ammoPotentialGlobal = pc.accuracy * (unit.ammo + GameObject.FindObjectsOfType<AmmoPack>().Length);
 		int enemyCount = gunEnemyCount + knifeEnemyCount;
-		if (ammoPotential<enemyCount){
+		if (ammoPotentialGlobal<enemyCount){
 			// need more ammo
-			ammoPerLevel = enemyCount/pc.accuracy;
+
+			accuracyLast = (accuracyLast + pc.accuracy) / 2;
+			ammoPerLevel = enemyCount/accuracyLast;
+//			setPacks (0,1,0);
 		}
+
+
 
 		setPacks (0,0,0);
 		setEnemiesNumber (0,0);
+
 
 		SceneManager.LoadScene ("Main");
 //		SceneManager.LoadScene ("Main");
