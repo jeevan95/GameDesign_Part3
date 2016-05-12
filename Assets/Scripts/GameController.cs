@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour {
 
 
@@ -27,7 +27,8 @@ public class GameController : MonoBehaviour {
 	public int ammoPacksNeeded;
 	public int armorPacksNeeded;
 
-
+	public int gunEnemiesLast=0;
+	public int knifeEnemiesLast=0;
 
 	public float spawnXMin;
 	public float spawnXMax;
@@ -37,6 +38,14 @@ public class GameController : MonoBehaviour {
 	public int playerDeath = 0;
 	public float playerAccuracy;
 	public int level=0;
+
+	float ammoPerLevel=5;
+	float healthPerLevel=100;
+
+	int ammoPacksPerLevel=4;
+	int healthPacksPerLevel=4;
+
+	public bool respawn = false;
 
 	void Start () {
 
@@ -57,9 +66,19 @@ public class GameController : MonoBehaviour {
 		SpawnEnemies ();
 		SpawnPacks ();
 
+		respawnPlayer ();
 
 
+	}
 
+
+	public void respawnPlayer(){
+		if (respawn) {
+			playerDead (GameObject.FindGameObjectWithTag("Player").GetComponent<Unit>());
+
+
+			respawn = false;
+		}
 	}
 
 	void SpawnPacks(){
@@ -67,21 +86,27 @@ public class GameController : MonoBehaviour {
 		int ammoPackCount = GameObject.FindObjectsOfType<AmmoPack>().Length;
 		int armorPackCount = GameObject.FindObjectsOfType<ArmorPack>().Length;
 
-		if (healthPackCount < healthPacksNeeded) {
+		if ( healthPacksNeeded>0) {
 			GameObject e = Instantiate (healthPack,getRandomSpawn() , transform.rotation) as GameObject;
 			e.GetComponent<HealthPack> ();
+			healthPacksNeeded -= 1;
 		}
 
 
-		if (ammoPackCount < ammoPacksNeeded) {
+		if ( ammoPacksNeeded>0) {
 			GameObject e = Instantiate (ammoPack,getRandomSpawn() , ammoPack.transform.rotation) as GameObject;
 			e.GetComponent<AmmoPack> ();
+			float ammos = ammoPerLevel / ammoPacksNeeded;
+			ammoPerLevel -= ammos;
+			e.GetComponent<AmmoPack> ().ammo = (int)ammos;
+			ammoPacksNeeded -= 1;
 		}
 
 
 		if (armorPackCount< armorPacksNeeded){
 			GameObject e = Instantiate (armorPack,getRandomSpawn() , armorPack.transform.rotation) as GameObject;
 			e.GetComponent<ArmorPack> ();
+			armorPacksNeeded -= 1;
 		}
 
 	}
@@ -89,14 +114,18 @@ public class GameController : MonoBehaviour {
 
 	void SpawnEnemies(){
 		gunEnemyCount = GameObject.FindGameObjectsWithTag ("GunEnemy").Length;
-		if (gunEnemiesNeeded != gunEnemyCount) {			
+		if (gunEnemiesNeeded >0) {			
 			GameObject e = Instantiate (gunEnemy,getRandomSpawn(), transform.rotation) as GameObject;
+			gunEnemiesNeeded -= 1;
+			gunEnemiesLast += 1;
 		}
 
 
 		knifeEnemyCount = GameObject.FindGameObjectsWithTag ("KnifeEnemy").Length;
-		if (knifeEnemiesNeeded != knifeEnemyCount) {			
+		if (knifeEnemiesNeeded>0) {			
 			GameObject e = Instantiate (knifeEnemy,getRandomSpawn(), transform.rotation) as GameObject;
+			knifeEnemiesNeeded -= 1;
+			knifeEnemiesLast += 1;
 		}
 
 
@@ -108,6 +137,50 @@ public class GameController : MonoBehaviour {
 		return new Vector3 (randomX, 0.5f, randomY);
 	}
 
+
+
+	public void setEnemiesNumber(int gunInc, int knifeInc){
+		
+		gunEnemiesNeeded = gunEnemiesLast+gunInc;
+		knifeEnemiesNeeded = knifeEnemiesLast+knifeInc;
+
+		gunEnemiesLast = 0;
+		knifeEnemiesLast = 0;
+
+	}
+
+	void setPacks(int hpInc, int ammoInc, int armorInc){
+		ammoPacksNeeded = ammoPacksPerLevel+ammoInc;
+		healthPacksNeeded = healthPacksPerLevel+hpInc;
+
+	}
+
+	public void nextLevel(){
+		level += 1;
+		setEnemiesNumber (1,1);
+		setPacks (0,0,0);
+	}
+
+	public void playerDead(Unit unit){
+		playerDeath += 1;
+
+		PlayerController pc = unit.gameObject.GetComponent<PlayerController> ();
+
+		float ammoPotential = pc.accuracy * unit.ammo; //#kills
+
+		int enemyCount = gunEnemyCount + knifeEnemyCount;
+		if (ammoPotential<enemyCount){
+			// need more ammo
+			ammoPerLevel = enemyCount/pc.accuracy;
+		}
+
+		setPacks (0,0,0);
+		setEnemiesNumber (0,0);
+
+		SceneManager.LoadScene ("Main");
+//		SceneManager.LoadScene ("Main");
+
+	}
 }
 
 

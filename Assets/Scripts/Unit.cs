@@ -33,7 +33,6 @@ public class Unit : MonoBehaviour {
 				GetComponent<PlayerController> ().respawn.SetActive(true);
 				GetComponent<PlayerController> ().exit.SetActive(true);
 				if (!dead) {
-					GameObject.FindObjectOfType<GameController> ().playerDeath += 1;
 					dead = true;
 				}
 			} else {
@@ -68,6 +67,7 @@ public class Unit : MonoBehaviour {
 					if (bullet.owner.GetComponent<PlayerController> () != null) {
 						bullet.owner.GetComponent<PlayerController> ().kills += 1;
 					}
+
 				}
 			}
 

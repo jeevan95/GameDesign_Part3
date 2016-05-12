@@ -100,8 +100,7 @@ public class PlayerController : MonoBehaviour
 
 	public void Respawn(){
 		
-		SceneManager.LoadScene ("Main");
-
+		GameObject.FindObjectOfType<GameController> ().respawn = true;
 	}
 
 	public void Exit(){
