@@ -15,7 +15,7 @@ public class Bomb : MonoBehaviour {
 
 
 	void OnTriggerEnter(Collider other) {
-		Debug.Log ("sdds");
+		
 		if(other.gameObject.tag=="Player"){
 			GameObject.FindObjectOfType<GameController> ().nextLevel ();
 			SceneManager.LoadScene ("Main");

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 using System.Collections;
-using UnityEditor;
+
 
 public class Unit : MonoBehaviour {
 
@@ -59,7 +59,6 @@ public class Unit : MonoBehaviour {
 		Bullet bullet = other.GetComponent<Bullet> ();
 
 		if (bullet!=null) {
-			Debug.Log ("hit regisrested");
 			takeDamage (bullet.damage);
 			if (health < 1) {
 				if (bullet.owner != null) {

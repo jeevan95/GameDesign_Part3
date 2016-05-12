@@ -8,7 +8,7 @@ public class HealthPack : MonoBehaviour
 	void OnTriggerEnter (Collider other)
 	{
 		if (other.gameObject.tag == "Player") {
-			Debug.Log ("HealthPack taken");
+			
 			Unit unit = other.GetComponent<Unit> ();
 
 			if (unit != null) {

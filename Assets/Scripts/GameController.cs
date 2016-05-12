@@ -39,14 +39,17 @@ public class GameController : MonoBehaviour {
 	public float playerAccuracy;
 	public int level=0;
 
+	int randomSpeed=5;
 
 
 
 	public float ammoPerLevel=5;
 	public int ammoPacksPerLevel=4;
-	int healthPacksPerLevel=4;
-	float healthPerLevel=100;
+
 	public bool respawn = false;
+
+	public int healthPacksPerLevel=4;
+	public float healthPerLevel=100;
 
 	void Start () {
 
@@ -90,11 +93,17 @@ public class GameController : MonoBehaviour {
 		if ( healthPacksNeeded>0) {
 			GameObject e = Instantiate (healthPack,getRandomSpawn() , transform.rotation) as GameObject;
 			e.GetComponent<HealthPack> ();
+
+			float hps = healthPerLevel / healthPacksPerLevel;
+			Debug.Log ("HPS: " + hps);
+//			healthPerLevel -= hps;
+			e.GetComponent<HealthPack> ().HP = (int)hps;
 			healthPacksNeeded -= 1;
 		}
 
 
 		if ( ammoPacksNeeded>0) {
+			Debug.Log (ammoPacksNeeded);
 			GameObject e = Instantiate (ammoPack,getRandomSpawn() , ammoPack.transform.rotation) as GameObject;
 			e.GetComponent<AmmoPack> ();
 			float ammos = ammoPerLevel / ammoPacksNeeded;
@@ -117,6 +126,7 @@ public class GameController : MonoBehaviour {
 		gunEnemyCount = GameObject.FindGameObjectsWithTag ("GunEnemy").Length;
 		if (gunEnemiesNeeded >0) {			
 			GameObject e = Instantiate (gunEnemy,getRandomSpawn(), transform.rotation) as GameObject;
+			e.GetComponent<EnemyController>().moveSpeed = Random.Range(3, randomSpeed);
 			gunEnemiesNeeded -= 1;
 			gunEnemiesLast += 1;
 		}
@@ -150,44 +160,93 @@ public class GameController : MonoBehaviour {
 
 	}
 
-	void setPacks(int hpInc, int ammoInc, int armorInc){
-		ammoPacksNeeded = ammoPacksPerLevel+ammoInc;
-		healthPacksNeeded = healthPacksPerLevel+hpInc;
+	void setPacks(int hpInc, int ammoInc, int armorInc){		
+		ammoPacksPerLevel = ammoPacksPerLevel+ammoInc;
+		ammoPacksNeeded = ammoPacksPerLevel;
 
+		healthPacksPerLevel = healthPacksPerLevel + hpInc;
+		healthPacksPerLevel = Mathf.Max (0,healthPacksPerLevel);
+		healthPacksNeeded = healthPacksPerLevel;
+
+
+
+
+//		Debug.Log ("SETTTTTTTT:" + ammoPacksPerLevel);
 	}
 
 	public void nextLevel(){
+
+
 		level += 1;
+		if(randomSpeed<15){
+			randomSpeed += 2;
+		}
+
+		if (spawnXMax < 45f)
+		{
+			spawnXMax+=5;
+			spawnXMin-= 5;
+			spawnYMax+=5;
+			spawnYMin-=5;
+
+		}
+
 		setEnemiesNumber (1,1);
-		setPacks (0,0,0);
+		ammoPerLevel = (gunEnemiesNeeded+knifeEnemiesNeeded) / accuracyLast;
+
+		healthPerLevel *= 0.6f;
+
+		setPacks (-1,-1,0);
 	}
 
 
-	float accuracyLast=1;
+	float accuracyLast=1f;
 
 	public void playerDead(Unit unit){
 		playerDeath += 1;
 
 		PlayerController pc = unit.gameObject.GetComponent<PlayerController> ();
-		float ammoPotential = pc.accuracy * unit.ammo; //#kills
-		float ammoPotentialGlobal = pc.accuracy * (unit.ammo + GameObject.FindObjectsOfType<AmmoPack>().Length);
-		int enemyCount = gunEnemyCount + knifeEnemyCount;
-		if (ammoPotentialGlobal<enemyCount){
-			// need more ammo
+		Debug.Log (pc.accuracy + " " + accuracyLast);
+		if (pc.accuracy == 0 || pc.accuracy != pc.accuracy) {
+			pc.accuracy = 0.01f;
+		}
+		accuracyLast = (accuracyLast + pc.accuracy) / 2;
+		Debug.Log ("Accuracy last: " + accuracyLast);
+		float ammoPotential = accuracyLast * unit.ammo; //#kills
 
-			accuracyLast = (accuracyLast + pc.accuracy) / 2;
-			ammoPerLevel = enemyCount/accuracyLast;
+		int ammosLeftTotal = 0;
+		if (GameObject.FindObjectsOfType<AmmoPack> ().Length > 0) {
+			int ammosInPack = GameObject.FindObjectOfType<AmmoPack> ().ammo;
+			ammosLeftTotal = ammosInPack * GameObject.FindObjectsOfType<AmmoPack> ().Length;
+		}
+
+		float ammoPotentialGlobal = accuracyLast * (unit.ammo + (ammosLeftTotal) );
+		int enemyCount = GameObject.FindGameObjectsWithTag ("GunEnemy").Length + GameObject.FindGameObjectsWithTag ("KnifeEnemy").Length;
+		if (ammoPotentialGlobal < enemyCount) {
+			// need more ammo	
+			ammoPerLevel = (knifeEnemiesLast+gunEnemiesLast) / accuracyLast;
+			Debug.Log ("AMMOS NEXT LEVEL:" + ammoPerLevel);
 //			setPacks (0,1,0);
+			setPacks (0,0,0);	
+		}
+
+		if (ammoPotential < enemyCount  ){
+			setPacks (0,1,0);			
+		}
+
+		int hpacksLeft = GameObject.FindObjectsOfType<HealthPack> ().Length;
+
+		if (hpacksLeft>0){			
+			setPacks (1,0,0);
+			healthPerLevel *= 1.2f;
 		}
 
 
 
-		setPacks (0,0,0);
 		setEnemiesNumber (0,0);
 
 
 		SceneManager.LoadScene ("Main");
-//		SceneManager.LoadScene ("Main");
 
 	}
 }

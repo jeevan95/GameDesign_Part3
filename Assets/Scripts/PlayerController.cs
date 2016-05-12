@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
 
 	public int kills=0;
 	public int shoots=0;
-	public float accuracy=0;
+	public float accuracy=0.001f;
 	void Start ()
 	{
 		
