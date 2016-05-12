@@ -36,13 +36,13 @@ public class GameController : MonoBehaviour {
 
 	public int playerDeath = 0;
 	public float playerAccuracy;
-
+	public int level=0;
 
 	void Start () {
 
 		GameController gc = GameObject.FindObjectOfType<GameController> ();
 		if (gc != null && gc!=this) {			
-			Destroy (this);			
+			Destroy (this.gameObject);			
 		} else {
 			DontDestroyOnLoad (this.gameObject);
 		}

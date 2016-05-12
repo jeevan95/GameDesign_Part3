@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
 	public Text deathText;
 	public GameObject respawn;
 	public GameObject exit;
+	public Text levelText;
 
 	public float moveSpeed;
 	Rigidbody rb;
@@ -30,11 +31,14 @@ public class PlayerController : MonoBehaviour
 		respawn.SetActive(false);
 		exit.SetActive(false);
 		deathText.enabled = false;
+
+		levelText.text = "Level: " + GameObject.FindObjectOfType<GameController> ().level;
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{		
+		
 		accuracy = (float) kills/ (float)shoots;
 
 		LookAt ();

@@ -63,8 +63,11 @@ public class Unit : MonoBehaviour {
 			Debug.Log ("hit regisrested");
 			takeDamage (bullet.damage);
 			if (health < 1) {
-				if(bullet.owner.GetComponent<PlayerController>()!=null){
-					bullet.owner.GetComponent<PlayerController> ().kills += 1;
+				if (bullet.owner != null) {
+					
+					if (bullet.owner.GetComponent<PlayerController> () != null) {
+						bullet.owner.GetComponent<PlayerController> ().kills += 1;
+					}
 				}
 			}
 
